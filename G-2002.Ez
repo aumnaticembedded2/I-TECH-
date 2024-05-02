@@ -1,0 +1,57 @@
+[Device]
+SNC27P040
+
+[Files]
+.\Wave\G20021SOUNDFILE.wav_1.0-4-EN
+.\Wave\G20022SOUNDFILE.wav_1.0-4-EN
+.\Wave\G20023SOUNDFILE.wav_1.0-4-EN
+.\EZIO\G20021SOUNDFILE\OutputData\G20021SOUNDFILE.eio_WV:EIO(G20021SOUNDFILE.wav+G20021SOUNDFILE.eio)
+.\EZIO\G20022SOUNDFILE\OutputData\G20022SOUNDFILE.eio_WV:EIO(G20022SOUNDFILE.wav+G20022SOUNDFILE.eio)
+.\EZIO\G20023SOUNDFILE\OutputData\G20023SOUNDFILE.eio_WV:EIO(G20023SOUNDFILE.wav+G20023SOUNDFILE.eio)
+
+[Ram]
+m0=count0
+m0=press
+
+[Key]
+Direct=1(P20)
+Debounce=2(P20)
+
+
+[Configure]
+AutoSR=Enable
+LVD=Disable
+
+
+[Input_states]
+Input1: tr1 
+        
+[Output_states]
+
+[Output_configure]
+O1:	P2=[1 X 1 X]	
+
+
+[Paths]
+init: O1 Stop input1
+      &delay(1)
+      &count0=0 press=0 delay(2) End
+
+tr1: press=count0+1 press?1:tr2 press?2:tr3 press?3:tr4 press?4:tr5 End
+
+tr2:PLAY?:.\EZIO\G20021SOUNDFILE\OutputData\G20021SOUNDFILE.eio_WV:EIO(G20021SOUNDFILE.wav+G20021SOUNDFILE.eio)
+           &delay(8)
+           &END_ALL 
+
+tr3:PLAY?:.\EZIO\G20022SOUNDFILE\OutputData\G20022SOUNDFILE.eio_WV:EIO(G20022SOUNDFILE.wav+G20022SOUNDFILE.eio)
+           &delay(8)
+            &END_ALL ;press?2:tr3
+
+
+tr4:PLAY?:.\EZIO\G20023SOUNDFILE\OutputData\G20023SOUNDFILE.eio_WV:EIO(G20023SOUNDFILE.wav+G20023SOUNDFILE.eio)
+           &delay(8)
+           &END_ALL ;press?2:tr3            
+
+tr5:press=1 tr2
+            &Input1
+            &END_ALL
